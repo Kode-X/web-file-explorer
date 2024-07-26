@@ -1,7 +1,7 @@
-export type TreeNode = {
-    id: number;
-    name: string;
-    children?: TreeNode[];
-    isFile?: boolean;
-    content?: string;
-  };
+export interface TreeNode {
+  id: number;
+  name: string;
+  type: "file" | "folder";
+  path?: string;
+  children?: TreeNode[];
+}

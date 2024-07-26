@@ -1,128 +1,137 @@
-import React, { useState, useMemo } from 'react';
-import TreeView from './components/TreeView';
-import { TreeNode } from './types/types';
-
-
-const treeData: TreeNode[] = [
-  {
-    id: 1,
-    name: 'Documents',
-    children: [
-      {
-        id: 2,
-        name: 'Projects',
-        children: [
-          { id: 3, name: 'Project1.docx', isFile: true, content: 'This is the content of Project1.docx.' },
-          { id: 4, name: 'Project2.docx', isFile: true, content: 'This is the content of Project2.docx.' },
-        ],
-      },
-      {
-        id: 5,
-        name: 'Photos',
-        children: [
-          { id: 6, name: 'Vacation.jpg', isFile: true, content: 'This is an image file content.' },
-          { id: 7, name: 'Birthday.png', isFile: true, content: 'This is another image file content.' },
-        ],
-      },
-    ],
-  },
-  {
-    id: 8,
-    name: 'Downloads',
-    children: [
-      { id: 9, name: 'Software.exe', isFile: true, content: 'This is the content of Software.exe.' },
-    ],
-  },
-];
-
-const getPath = (node: TreeNode, path: string[] = []): string[] => {
-  if (!node) return path;
-  if (node.isFile) return [...path, node.name];
-  return node.children?.reduce((acc, child) => getPath(child, [...path, node.name]) || acc, path) || path;
-};
+import React, { useState } from "react";
+import { TreeNode } from "./types/types";
+import TreeView from "./components/TreeView";
 
 const App: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFileContent, setSelectedFileContent] = useState<string | null>(null);
-  const [filePath, setFilePath] = useState<string | null>(null);
+  // Define the JSON data directly in the app
+  const jsonData: TreeNode[] = [
+    {
+      id: 1,
+      name: "public",
+      type: "folder",
+      children: [
+        {
+          id: 2,
+          name: "readme.txt",
+          type: "file",
+        },
+        {
+          id: 3,
+          name: "config.json",
+          type: "file",
+        },
+        {
+          id: 4,
+          name: "image.png",
+          type: "file",
+        },
+      ],
+    },
+    {
+      id: 5,
+      name: "server",
+      children: [
+        {
+          id: 6,
+          name: "server.txt",
+          type: "file",
+        },
+        {
+          id: 7,
+          name: "settings.json",
+          type: "file",
+        },
+        {
+          id: 8,
+          name: "logo.png",
+          type: "file",
+        },
+      ],
+      type: "folder",
+    },
+    {
+      id: 9,
+      name: "src",
+      children: [
+        {
+          id: 10,
+          name: "info.txt",
+          type: "file",
+        },
+        {
+          id: 11,
+          name: "data.json",
+          type: "file",
+        },
+        {
+          id: 12,
+          name: "banner.png",
+          type: "file",
+        },
+      ],
+      type: "folder",
+    },
+  ];
+
+  const [nodes, setNodes] = useState<TreeNode[]>(jsonData);
+  const [selectedFile, setSelectedFile] = useState<TreeNode | null>(null);
+  const [fileContent, setFileContent] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false);
 
-  const filterTreeData = (data: TreeNode[], query: string): TreeNode[] => {
-    const lowerCaseQuery = query.toLowerCase();
-
-    const filterNode = (node: TreeNode): TreeNode | null => {
-      if (node.isFile) {
-        return node.name.toLowerCase().includes(lowerCaseQuery) ? node : null;
-      }
-
-      const filteredChildren = (node.children ?? [])
-        .map(filterNode)
-        .filter(Boolean) as TreeNode[];
-
-      if (filteredChildren.length > 0 || node.name.toLowerCase().includes(lowerCaseQuery)) {
-        return { ...node, children: filteredChildren };
-      }
-
-      return null;
-    };
-
-    return data.map(filterNode).filter(Boolean) as TreeNode[];
-  };
-
-  const filteredData = useMemo(() => filterTreeData(treeData, searchQuery), [searchQuery]);
-
-  const handleFileClick = (node: TreeNode | undefined) => {
-    if (node?.isFile) {
-      setSelectedFileContent(node.content || null);
-      const path = getPath(node);
-      setFilePath(path.join(' / '));
-      setIsEditing(false); // Disable editing mode when a new file is selected
-    } else {
-      setSelectedFileContent(null);
-      setFilePath(null);
-    }
-  };
-
-  const handleEditClick = () => {
-    setIsEditing((prev) => !prev); // Toggle edit mode
-  };
-
-  const handleContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setSelectedFileContent(event.target.value);
+  const handleFileClick = (node: TreeNode) => {
+    setSelectedFile(node);
+    setFileContent(""); // Placeholder for file content
+    setIsEditing(false);
   };
 
   return (
     <div className="flex h-screen">
-      <div className="w-1/4 bg-gray-50 border-r border-gray-200 p-4">
-        <h1 className="text-2xl font-bold mb-4">My Files</h1>
+      <div className="w-1/3 bg-gray-100 p-4">
+        <div className="text-xl font-semibold mb-4">My Files</div>
         <input
           type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded mb-4"
+          className="w-full mb-4 p-2 border rounded"
+          placeholder="Search files..."
+          onChange={(e) => console.log(e.target.value)}
         />
-        <TreeView data={filteredData} onFileClick={handleFileClick} />
+        <TreeView nodes={nodes} onFileClick={handleFileClick} />
       </div>
       <div className="flex-1 p-4">
-        {filePath && <div className="text-sm text-gray-600 mb-2">{filePath}</div>}
-        {selectedFileContent ? (
-          <div>
-            <button
-              onClick={handleEditClick}
-              className="mb-2 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-            >
-              {isEditing ? 'Save' : 'Edit'}
-            </button>
-            <textarea
-              className="w-full h-full p-2 border border-gray-300 rounded"
-              value={selectedFileContent}
-              onChange={handleContentChange}
-              readOnly={!isEditing}
-            />
-          </div>
+        {selectedFile ? (
+          <>
+            <div className="text-lg font-semibold mb-2">
+              Path: {selectedFile.path}
+            </div>
+            {isEditing ? (
+              <>
+                <textarea
+                  className="w-full h-full border border-gray-300 rounded p-2"
+                  value={fileContent}
+                  onChange={(e) => setFileContent(e.target.value)}
+                />
+                <button
+                  className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
+                 // onClick={handleSave}
+                >
+                  Save
+                </button>
+              </>
+            ) : (
+              <div className="relative w-full h-full border border-gray-300 rounded p-2">
+                <button
+                  className="absolute top-2 right-2 bg-blue-500 text-white px-4 py-1 rounded"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit
+                </button>
+                <pre>{fileContent}</pre>
+              </div>
+            )}
+          </>
         ) : (
-          <div className="text-gray-500">Select a file to view its content.</div>
+          <div className="text-gray-500">
+            Select a file to view its content.
+          </div>
         )}
       </div>
     </div>
