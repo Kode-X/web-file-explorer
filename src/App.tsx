@@ -3,7 +3,6 @@ import { TreeNode } from "./types/types";
 import TreeView from "./components/TreeView";
 
 const App: React.FC = () => {
-  // Define the JSON data directly in the app
   const jsonData: TreeNode[] = [
     {
       id: 1,
@@ -77,11 +76,35 @@ const App: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<TreeNode | null>(null);
   const [fileContent, setFileContent] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleFileClick = (node: TreeNode) => {
     setSelectedFile(node);
     setFileContent(""); // Placeholder for file content
     setIsEditing(false);
+  };
+
+  const filteredNodes = (nodes: TreeNode[]): TreeNode[] => {
+    if (!searchTerm) return nodes;
+  
+    const searchLowerCase = searchTerm.toLowerCase();
+  
+    const filterNodes = (nodes: TreeNode[]): TreeNode[] => {
+      return nodes
+        .map((node) => {
+          if (node.type === "folder") {
+            const filteredChildren = filterNodes(node.children || []);
+            return filteredChildren.length || node.name.toLowerCase().includes(searchLowerCase)
+              ? { ...node, children: filteredChildren }
+              : null;
+          } else {
+            return node.name.toLowerCase().includes(searchLowerCase) ? node : null;
+          }
+        })
+        .filter(Boolean) as TreeNode[];
+    };
+  
+    return filterNodes(nodes);
   };
 
   return (
@@ -92,9 +115,10 @@ const App: React.FC = () => {
           type="text"
           className="w-full mb-4 p-2 border rounded"
           placeholder="Search files..."
-          onChange={(e) => console.log(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <TreeView nodes={nodes} onFileClick={handleFileClick} />
+        <TreeView nodes={filteredNodes(nodes)} onFileClick={handleFileClick} />
       </div>
       <div className="flex-1 p-4">
         {selectedFile ? (
@@ -111,7 +135,7 @@ const App: React.FC = () => {
                 />
                 <button
                   className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
-                 // onClick={handleSave}
+                  // onClick={handleSave}
                 >
                   Save
                 </button>

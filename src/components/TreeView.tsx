@@ -1,6 +1,6 @@
 // TreeView.tsx
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TreeNode } from "../types/types";
 import { handleAddNode, handleDelete } from "../utils/getFolderFileActions";
 import TreeNodeComponent from "./TreeNodeComponent";
@@ -16,6 +16,11 @@ const TreeView: React.FC<TreeViewProps> = ({
 }) => {
   const [nodes, setNodes] = useState<TreeNode[]>(initialNodes);
 
+  useEffect(() => {
+    setNodes(initialNodes);
+  }, [initialNodes]);
+
+  console.log(initialNodes);
   const onDelete = (name: string, type: string) => {
     handleDelete(name, type, setNodes, nodes);
   };

@@ -78,7 +78,10 @@ const TreeNodeComponent: React.FC<{
                 {node.name}
               </span>
               {isHovered && node.type === "folder" && (
-                <FolderActions openModal={openModal} onDelete={onDelete} />
+                <FolderActions openModal={openModal} onDelete={onDelete} type={"folder"}/>
+              )}
+               {isHovered && node.type === "file" && (
+                <FolderActions openModal={openModal} onDelete={onDelete} type={"file"}/>
               )}
             </DisclosureButton>
             {node.type === "folder" && (
