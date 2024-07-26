@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { TreeNode } from "../types/types";
-import { handleDelete, handleAddFolder } from "../utils/getFolderFileActions";
+import { handleAddNode, handleDelete } from "../utils/getFolderFileActions";
 import TreeNodeComponent from "./TreeNodeComponent";
 
 interface TreeViewProps {
@@ -20,10 +20,13 @@ const TreeView: React.FC<TreeViewProps> = ({
     handleDelete(name, type, setNodes, nodes);
   };
 
-  const onAddFolder = (name: string, parentName: string) => {
-    handleAddFolder(name, parentName, setNodes, nodes);
+  const onAddNode = (
+    name: string,
+    parentName: string,
+    type: "folder" | "file"
+  ) => {
+    handleAddNode(name, parentName, type, setNodes, nodes);
   };
-
   return (
     <div className="space-y-2">
       {nodes.map((node) => (
@@ -32,7 +35,7 @@ const TreeView: React.FC<TreeViewProps> = ({
           node={node}
           onFileClick={onFileClick}
           onDelete={() => onDelete(node.name, node.type)}
-          onAddFolder={onAddFolder}
+          onAddNode={onAddNode}
         />
       ))}
     </div>

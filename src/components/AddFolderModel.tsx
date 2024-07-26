@@ -6,19 +6,22 @@ import { useState } from "react";
 interface AddFolderModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
-  handleSave: (folderName: string) => void;
+  handleSave: (folderName: string, type: "folder" | "file") => void;
+  type: "folder" | "file";
 }
 
 const AddFolderModal: React.FC<AddFolderModalProps> = ({
   isModalOpen,
   closeModal,
   handleSave,
+  type,
 }) => {
-  const [newFolderName, setNewFolderName] = useState("");
+  const [newName, setNewName] = useState("");
 
   const onSave = () => {
-    handleSave(newFolderName);
-    setNewFolderName(""); // Reset input after saving
+    console.log(type);
+    handleSave(newName, type);
+    setNewName(""); // Reset input after saving
   };
 
   return (
@@ -29,13 +32,13 @@ const AddFolderModal: React.FC<AddFolderModalProps> = ({
     >
       <div className="flex items-center justify-center min-h-screen">
         <div className="bg-white p-6 rounded shadow-lg">
-          <DialogTitle>Add New Folder</DialogTitle>
+          <DialogTitle>{`Add New ${type}`}</DialogTitle>
           <input
             type="text"
             className="border p-2 w-full mt-2"
-            value={newFolderName}
-            onChange={(e) => setNewFolderName(e.target.value)}
-            placeholder="Folder name"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder={`${type} name`}
           />
           <div className="mt-4 flex justify-end">
             <button

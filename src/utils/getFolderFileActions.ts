@@ -21,35 +21,37 @@ export const handleDelete = (
   setNodes(deleteNode(nodes));
 };
 
-export const handleAddFolder = (
-    folderName: string,
+export const handleAddNode = (
+    name: string,
     parentName: string,
+    type: "folder" | "file", // Correct usage
     setNodes: React.Dispatch<React.SetStateAction<TreeNode[]>>,
     nodes: TreeNode[]
   ) => {
-    const addFolderToNode = (nodes: TreeNode[]): TreeNode[] => {
+    const addNodeToTree = (nodes: TreeNode[]): TreeNode[] => {
       return nodes.map((node) => {
         if (node.name === parentName && node.type === "folder") {
-          const newFolder: TreeNode = {
+          const newNode: TreeNode = {
             id: Date.now(), // Ensure unique ID
-            name: folderName,
-            type: "folder",
-            children: [],
+            name,
+            type, // Correctly assigned "folder" or "file"
+            children: type === "folder" ? [] : undefined, // Folders have children, files do not
           };
           return {
             ...node,
-            children: [...(node.children ?? []), newFolder],
+            children: [...(node.children ?? []), newNode],
           };
         }
         if (node.children) {
           return {
             ...node,
-            children: addFolderToNode(node.children),
+            children: addNodeToTree(node.children),
           };
         }
         return node;
       });
     };
   
-    setNodes(addFolderToNode(nodes));
+    setNodes(addNodeToTree(nodes));
   };
+  
