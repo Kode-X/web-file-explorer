@@ -1,7 +1,7 @@
 // components/tree/AddNodeButtons.tsx
 import React, { useState } from "react";
 import AddFolderAndFileModal from "./AddFolderAndFileModal";
-
+import Button from "../customLibrary/Button";
 
 interface AddFolderAndFileButtonsProps {
   onAddFolder: (name: string) => void;
@@ -34,19 +34,13 @@ const AddFolderAndFileButtons: React.FC<AddFolderAndFileButtonsProps> = ({
   };
 
   return (
-    <div className="flex space-x-4">
-      <button
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-        onClick={openFolderModal}
-      >
+    <div className="flex space-x-4  mb-5 pb-5 border-b border-gray-300">
+      <Button variant="primary" onClick={openFolderModal}>
         Add Folder
-      </button>
-      <button
-        className="px-4 py-2 bg-green-500 text-white rounded"
-        onClick={openFileModal}
-      >
+      </Button>
+      <Button variant="secondary" onClick={openFileModal}>
         Add File
-      </button>
+      </Button>
 
       {/* Modals for adding folder and file */}
       <AddFolderAndFileModal
