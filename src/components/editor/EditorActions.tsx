@@ -1,5 +1,6 @@
 // components/editor/EditorActions.tsx
-import React from 'react';
+import React from "react";
+import Button from "../customLibrary/Button";
 
 interface EditorActionsProps {
   isEditing: boolean;
@@ -12,23 +13,23 @@ const EditorActions: React.FC<EditorActionsProps> = ({
   isEditing,
   handleSave,
   handleCancel,
-  setIsEditing
+  setIsEditing,
 }) => {
   return (
-    <div className="mb-2 p-2 bg-gray-200 border border-gray-300 rounded">
+    <div className="mb-2 p-2 bg-gray-200 border border-gray-300 rounded space-x-2">
       {isEditing ? (
         <>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded mr-2" onClick={handleSave}>
+          <Button variant="primary" onClick={handleSave}>
             Save
-          </button>
-          <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={handleCancel}>
+          </Button>
+          <Button variant="cancel" onClick={handleCancel}>
             Cancel
-          </button>
+          </Button>
         </>
       ) : (
-        <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={() => setIsEditing(true)}>
+        <Button variant="secondary" onClick={() => setIsEditing(true)}>
           Edit
-        </button>
+        </Button>
       )}
     </div>
   );
