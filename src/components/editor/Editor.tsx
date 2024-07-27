@@ -1,9 +1,9 @@
 // components/editor/Editor.tsx
 import React from 'react';
 import { useFileContext } from '../../context/FileContext';
+import { FileNode, TreeNode } from '../../types/types';
 import EditorActions from './EditorActions';
 import EditorView from './EditorView';
-import { TreeNode } from '../../types/types';
 
 const Editor: React.FC = () => {
   const {
@@ -20,8 +20,8 @@ const Editor: React.FC = () => {
   } = useFileContext();
 
   const handleEditorActionSave = () => {
-    if (selectedFile) {
-      const updatedNodes = updateNodeContent(nodes, selectedFile.id, fileContent);
+    if (selectedFile && (selectedFile as FileNode).type === 'file') {
+      const updatedNodes = updateNodeContent(nodes, (selectedFile as FileNode).id, fileContent);
       setNodes(updatedNodes);
       setOriginalContent(fileContent);
       setIsEditing(false);
@@ -36,22 +36,30 @@ const Editor: React.FC = () => {
   return (
     <>
       {selectedFile ? (
-        <>
-          <div className="text-lg font-semibold mb-2">
-            Path: {selectedFile.path}
-          </div>
-          <EditorActions
-            isEditing={isEditing}
-            handleSave={handleEditorActionSave}
-            handleCancel={handleEditorActionCancel}
-            setIsEditing={setIsEditing}
-          />
-          <EditorView
-            isEditing={isEditing}
-            fileContent={fileContent}
-            setFileContent={setFileContent}
-          />
-        </>
+        (selectedFile as FileNode).type === 'file' ? (
+          (selectedFile as FileNode).content ? (
+            <img src={(selectedFile as FileNode).content} alt={(selectedFile as FileNode).name} className="max-w-full max-h-full" />
+          ) : (
+            <div>No content available</div>
+          )
+        ) : (
+          <>
+            <div className="text-lg font-semibold mb-2">
+              Path: {selectedFile.path}
+            </div>
+            <EditorActions
+              isEditing={isEditing}
+              handleSave={handleEditorActionSave}
+              handleCancel={handleEditorActionCancel}
+              setIsEditing={setIsEditing}
+            />
+            <EditorView
+              isEditing={isEditing}
+              fileContent={fileContent}
+              setFileContent={setFileContent}
+            />
+          </>
+        )
       ) : (
         <div className="text-gray-500">Select a file to view its content.</div>
       )}
@@ -59,7 +67,6 @@ const Editor: React.FC = () => {
   );
 };
 
-// Helper function to update the content in nodes
 const updateNodeContent = (nodes: TreeNode[], fileId: number, newContent: string): TreeNode[] => {
   const updateNode = (nodes: TreeNode[]): TreeNode[] =>
     nodes.map(node => {

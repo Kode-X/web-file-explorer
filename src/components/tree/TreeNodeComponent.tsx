@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+// components/tree/TreeNodeComponent.tsx
+import React, { useState } from "react";
 import {
   ChevronDownIcon,
   ChevronRightIcon,
@@ -75,7 +76,16 @@ const TreeNodeComponent: React.FC<{
                 className={classNames("flex-1", {
                   "text-blue-500": node.type === "file",
                 })}
-                onClick={() => node.type === "file" && onFileClick(node)}
+                onClick={() => {
+                  if (node.type === "file") {
+                    if (node.name.endsWith(".png")) {
+                      // Show the image if it's a PNG file
+                      window.open(node.content, "_blank");
+                    } else {
+                      onFileClick(node);
+                    }
+                  }
+                }}
               >
                 {node.name}
               </span>
