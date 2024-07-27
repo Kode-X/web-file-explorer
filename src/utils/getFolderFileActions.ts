@@ -22,36 +22,50 @@ export const handleDelete = (
 };
 
 export const handleAddNode = (
-    name: string,
-    parentName: string,
-    type: "folder" | "file", // Correct usage
-    setNodes: React.Dispatch<React.SetStateAction<TreeNode[]>>,
-    nodes: TreeNode[]
-  ) => {
-    const addNodeToTree = (nodes: TreeNode[]): TreeNode[] => {
-      return nodes.map((node) => {
-        if (node.name === parentName && node.type === "folder") {
-          const newNode: TreeNode = {
-            id: Date.now(), // Ensure unique ID
-            name,
-            type, // Correctly assigned "folder" or "file"
-            children: type === "folder" ? [] : undefined, // Folders have children, files do not
-          };
-          return {
-            ...node,
-            children: [...(node.children ?? []), newNode],
-          };
-        }
-        if (node.children) {
-          return {
-            ...node,
-            children: addNodeToTree(node.children),
-          };
-        }
-        return node;
-      });
-    };
-  
-    setNodes(addNodeToTree(nodes));
+  name: string,
+  parentName: string,
+  type: "folder" | "file", // Correct usage
+  setNodes: React.Dispatch<React.SetStateAction<TreeNode[]>>,
+  nodes: TreeNode[]
+) => {
+  const addNodeToTree = (nodes: TreeNode[]): TreeNode[] => {
+    return nodes.map((node) => {
+      if (node.name === parentName && node.type === "folder") {
+        const newNode: TreeNode = {
+          id: Date.now(), // Ensure unique ID
+          name,
+          type, // Correctly assigned "folder" or "file"
+          children: type === "folder" ? [] : undefined, // Folders have children, files do not
+        };
+
+        // Create a sorted list where folders come before files
+        const updatedChildren = [
+          ...(newNode.type === "folder"
+            ? [newNode] // Insert new folder first
+            : []),
+          ...(node.children ?? []).filter((child) => child.type === "folder"), // Existing folders
+          ...(newNode.type === "file"
+            ? [newNode] // Insert new file last
+            : []),
+          ...(node.children ?? []).filter((child) => child.type === "file"), // Existing files
+        ];
+
+        return {
+          ...node,
+          children: updatedChildren,
+        };
+      }
+
+      if (node.children) {
+        return {
+          ...node,
+          children: addNodeToTree(node.children),
+        };
+      }
+
+      return node;
+    });
   };
-  
+
+  setNodes(addNodeToTree(nodes));
+};

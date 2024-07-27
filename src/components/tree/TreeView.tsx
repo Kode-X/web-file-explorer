@@ -1,8 +1,8 @@
 // TreeView.tsx
 
 import React, { useEffect, useState } from "react";
-import { TreeNode } from "../types/types";
-import { handleAddNode, handleDelete } from "../utils/getFolderFileActions";
+import { TreeNode } from "../../types/types";
+import { handleAddNode, handleDelete } from "../../utils/getFolderFileActions";
 import TreeNodeComponent from "./TreeNodeComponent";
 
 interface TreeViewProps {
