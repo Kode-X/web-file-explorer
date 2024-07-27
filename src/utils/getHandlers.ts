@@ -1,9 +1,5 @@
 import { TreeNode } from "../types/types";
-import {
-  createNode,
-  sortChildren,
-  updateChildren,
-} from "./getHelpers";
+import { createNode, sortChildren, updateChildren } from "./getHelpers";
 
 // export const handleFileClick = (
 //   node: TreeNode,
@@ -71,6 +67,10 @@ export const handleAddNode = (
   nodes: TreeNode[]
 ) => {
   const addNodeToTree = (nodes: TreeNode[]): TreeNode[] => {
+    if (nodes.length === 0) {
+      const newNode = createNode(name, type, "");
+      return [newNode];
+    }
     return nodes.map((node) => {
       if (node.name === parentName && node.type === "folder") {
         const newNode = createNode(name, type, node.path || "");

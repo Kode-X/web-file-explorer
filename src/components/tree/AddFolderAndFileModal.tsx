@@ -1,16 +1,16 @@
-// AddFolderModal.tsx
+// AddFolderAndFileModal.tsx
 
 import { Dialog, DialogTitle } from "@headlessui/react";
 import { useState } from "react";
 
-interface AddFolderModalProps {
+interface AddFolderAndFileModalProps {
   isModalOpen: boolean;
   closeModal: () => void;
   handleSave: (folderName: string, type: "folder" | "file") => void;
   type: "folder" | "file";
 }
 
-const AddFolderModal: React.FC<AddFolderModalProps> = ({
+const AddFolderAndFileModal: React.FC<AddFolderAndFileModalProps> = ({
   isModalOpen,
   closeModal,
   handleSave,
@@ -60,4 +60,4 @@ const AddFolderModal: React.FC<AddFolderModalProps> = ({
   );
 };
 
-export default AddFolderModal;
+export default AddFolderAndFileModal;
