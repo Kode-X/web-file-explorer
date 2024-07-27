@@ -1,8 +1,8 @@
 // components/tree/TreeView.tsx
-import React, { useEffect, useState } from 'react';
-import { TreeNode } from '../../types/types';
-import TreeNodeComponent from './TreeNodeComponent';
-import useTreeActions from '../../hooks/useTreeActions';
+import React, { useEffect, useState } from "react";
+import useTreeActions from "../../hooks/useTreeActions";
+import { TreeNode } from "../../types/types";
+import TreeNodeComponent from "./TreeNodeComponent";
 
 interface TreeViewProps {
   nodes: TreeNode[];
@@ -20,17 +20,21 @@ const TreeView: React.FC<TreeViewProps> = ({
     setNodes(initialNodes);
   }, [initialNodes]);
 
+
   return (
     <div className="space-y-2">
+
       {nodes.map((node) => (
         <TreeNodeComponent
           key={node.id}
           node={node}
           onFileClick={onFileClick}
-          onDelete={() => deleteNode(node.name, node.type)}
-          onAddNode={(name: string, parentName: string, type: "folder" | "file") =>
-            addNode(name, parentName, type)
-          }
+          onDelete={() => deleteNode(node)}
+          onAddNode={(
+            name: string,
+            parentName: string,
+            type: "folder" | "file"
+          ) => addNode(name, parentName, type)}
         />
       ))}
     </div>

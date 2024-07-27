@@ -13,7 +13,7 @@ import {
 import classNames from "classnames";
 import { TreeNode } from "../../types/types";
 import TreeView from "./TreeView";
-import AddFolderModal from "./AddFolderModal";
+import AddFolderAndFileModal from "./AddFolderAndFileModal";
 import FolderActions from "./FolderActions";
 
 const TreeNodeComponent: React.FC<{
@@ -56,13 +56,15 @@ const TreeNodeComponent: React.FC<{
             >
               {node.type === "folder" && (
                 <>
-                  <button className="text-gray-500 hover:text-gray-700 focus:outline-none">
-                    {open ? (
-                      <ChevronDownIcon className="w-5 h-5" />
-                    ) : (
-                      <ChevronRightIcon className="w-5 h-5" />
-                    )}
-                  </button>
+                  {node.children.length > 0 && (
+                    <button className="text-gray-500 hover:text-gray-700 focus:outline-none">
+                      {open ? (
+                        <ChevronDownIcon className="w-5 h-5" />
+                      ) : (
+                        <ChevronRightIcon className="w-5 h-5" />
+                      )}
+                    </button>
+                  )}
                   <FolderIcon className="w-5 h-5 text-gray-500" />
                 </>
               )}
@@ -78,27 +80,35 @@ const TreeNodeComponent: React.FC<{
                 {node.name}
               </span>
               {isHovered && node.type === "folder" && (
-                <FolderActions openModal={openModal} onDelete={onDelete} type={"folder"}/>
+                <FolderActions
+                  openModal={openModal}
+                  onDelete={onDelete}
+                  type={"folder"}
+                />
               )}
-               {isHovered && node.type === "file" && (
-                <FolderActions openModal={openModal} onDelete={onDelete} type={"file"}/>
+              {isHovered && node.type === "file" && (
+                <FolderActions
+                  openModal={openModal}
+                  onDelete={onDelete}
+                  type={"file"}
+                />
               )}
             </DisclosureButton>
             {node.type === "folder" && (
-            <DisclosurePanel className="pl-4" key={node.children?.length}>
-              {open && (
-                <TreeView
-                  nodes={node.children || []}
-                  onFileClick={onFileClick}
-                />
-              )}
-            </DisclosurePanel>
-             )}
+              <DisclosurePanel className="pl-4" key={node.children?.length}>
+                {open && (
+                  <TreeView
+                    nodes={node.children || []}
+                    onFileClick={onFileClick}
+                  />
+                )}
+              </DisclosurePanel>
+            )}
           </>
         )}
       </Disclosure>
 
-      <AddFolderModal
+      <AddFolderAndFileModal
         isModalOpen={isModalOpen}
         closeModal={closeModal}
         handleSave={handleSave}
