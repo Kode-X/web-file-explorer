@@ -1,8 +1,8 @@
 // components/tree/TreeView.tsx
 import React, { useEffect, useState } from 'react';
 import { TreeNode } from '../../types/types';
-import { handleAddNode, handleDelete } from '../../utils/getFolderFileActions';
 import TreeNodeComponent from './TreeNodeComponent';
+import useTreeActions from '../../hooks/useTreeActions';
 
 interface TreeViewProps {
   nodes: TreeNode[];
@@ -13,24 +13,13 @@ const TreeView: React.FC<TreeViewProps> = ({
   nodes: initialNodes,
   onFileClick,
 }) => {
+  const { addNode, deleteNode } = useTreeActions();
   const [nodes, setNodes] = useState<TreeNode[]>(initialNodes);
 
   useEffect(() => {
     setNodes(initialNodes);
   }, [initialNodes]);
 
-  const onDelete = (name: string, type: string) => {
-    handleDelete(name, type, setNodes, nodes);
-  };
-
-  const onAddNode = (
-    name: string,
-    parentName: string,
-    type: "folder" | "file"
-  ) => {
-    handleAddNode(name, parentName, type, setNodes, nodes);
-  };
-  
   return (
     <div className="space-y-2">
       {nodes.map((node) => (
@@ -38,8 +27,10 @@ const TreeView: React.FC<TreeViewProps> = ({
           key={node.id}
           node={node}
           onFileClick={onFileClick}
-          onDelete={() => onDelete(node.name, node.type)}
-          onAddNode={onAddNode}
+          onDelete={() => deleteNode(node.name, node.type)}
+          onAddNode={(name: string, parentName: string, type: "folder" | "file") =>
+            addNode(name, parentName, type)
+          }
         />
       ))}
     </div>

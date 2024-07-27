@@ -4,7 +4,7 @@ import { jsonData, TreeNode } from '../types/types';
 
 interface FileContextType {
   nodes: TreeNode[];
-  setNodes: (nodes: TreeNode[]) => void;
+  setNodes: React.Dispatch<React.SetStateAction<TreeNode[]>>;
   selectedFile: TreeNode | null;
   fileContent: string;
   originalContent: string;

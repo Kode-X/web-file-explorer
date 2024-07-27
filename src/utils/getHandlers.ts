@@ -1,4 +1,9 @@
 import { TreeNode } from "../types/types";
+import {
+  createNode,
+  sortChildren,
+  updateChildren,
+} from "./getHelpers";
 
 // export const handleFileClick = (
 //   node: TreeNode,
@@ -26,22 +31,13 @@ export const handleFileClick = (
   setOriginalContent: (content: string) => void,
   setIsEditing: (isEditing: boolean) => void
 ) => {
-  if (node.type === 'file') {
-    const fileContent = node.content || '';
+  if (node.type === "file") {
+    const fileContent = node.content || "";
     setFileContent(fileContent);
     setOriginalContent(fileContent);
     setSelectedFile(node);
     setIsEditing(false);
   }
-};
-export const fetchFileContent = (
-  path: string,
-  setFileContent: (content: string) => void,
-  setOriginalContent: (content: string) => void
-) => {
-  const mockContent = `Content of the file at ${path}`;
-  setFileContent(mockContent);
-  setOriginalContent(mockContent);
 };
 
 export const handleSave = (
@@ -67,31 +63,51 @@ export const handleCancel = (
   setIsEditing(false);
 };
 
-export const filteredNodes = (
-  nodes: TreeNode[],
-  searchTerm: string
-): TreeNode[] => {
-  if (!searchTerm) return nodes;
+export const handleAddNode = (
+  name: string,
+  parentName: string,
+  type: "folder" | "file",
+  setNodes: React.Dispatch<React.SetStateAction<TreeNode[]>>,
+  nodes: TreeNode[]
+) => {
+  const addNodeToTree = (nodes: TreeNode[]): TreeNode[] => {
+    return nodes.map((node) => {
+      if (node.name === parentName && node.type === "folder") {
+        const newNode = createNode(name, type, node.path || "");
+        const updatedChildren = updateChildren(node.children || [], newNode);
+        const sortedChildren = sortChildren(updatedChildren);
 
-  const searchLowerCase = searchTerm.toLowerCase();
+        return { ...node, children: sortedChildren };
+      }
 
-  const filterNodes = (nodes: TreeNode[]): TreeNode[] => {
-    return nodes
-      .map((node) => {
-        if (node.type === "folder") {
-          const filteredChildren = filterNodes(node.children || []);
-          return filteredChildren.length ||
-            node.name.toLowerCase().includes(searchLowerCase)
-            ? { ...node, children: filteredChildren }
-            : null;
-        } else {
-          return node.name.toLowerCase().includes(searchLowerCase)
-            ? node
-            : null;
-        }
-      })
-      .filter(Boolean) as TreeNode[];
+      if (node.children) {
+        return { ...node, children: addNodeToTree(node.children) };
+      }
+
+      return node;
+    });
   };
 
-  return filterNodes(nodes);
+  setNodes((prevNodes: TreeNode[]) => addNodeToTree(prevNodes));
+};
+
+export const handleDeleteNode = (
+  name: string,
+  type: string,
+  setNodes: React.Dispatch<React.SetStateAction<TreeNode[]>>,
+  nodes: TreeNode[]
+) => {
+  const deleteNode = (nodes: TreeNode[]): TreeNode[] => {
+    return nodes.filter((node) => {
+      if (node.name === name) {
+        return false;
+      }
+      if (node.children) {
+        node.children = deleteNode(node.children);
+      }
+      return true;
+    });
+  };
+
+  setNodes(deleteNode(nodes));
 };

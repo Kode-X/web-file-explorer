@@ -1,10 +1,12 @@
+// components/tree/Tree.tsx
 import React from "react";
 import { useFileContext } from "../../context/FileContext";
 import TreeView from "./TreeView";
-import { handleFileClick } from "../../utils/getFileHandlers"; // Βεβαιώσου ότι έχεις την σωστή διαδρομή
-import { filteredNodes } from "../../utils/getFileHandlers"; // Εάν χρειάζεται
+import { handleFileClick } from "../../utils/getHandlers";
+
 import { TreeNode } from "../../types/types";
 import SearchTree from "./SearchTree";
+import { filteredNodes } from "../../utils/getHelpers";
 
 const Tree: React.FC = () => {
   const {
