@@ -13,8 +13,8 @@ import {
 import classNames from "classnames";
 import { TreeNode } from "../../types/types";
 import TreeView from "./TreeView";
-import AddFolderModal from "../AddFolderModel";
-import FolderActions from "../FolderActions";
+import AddFolderModal from "./AddFolderModal";
+import FolderActions from "./FolderActions";
 
 const TreeNodeComponent: React.FC<{
   node: TreeNode;

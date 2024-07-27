@@ -1,4 +1,5 @@
-import React from "react";
+// components/editor/EditorView.tsx
+import React from 'react';
 
 interface EditorViewProps {
   isEditing: boolean;
@@ -6,13 +7,9 @@ interface EditorViewProps {
   setFileContent: (content: string) => void;
 }
 
-const EditorView: React.FC<EditorViewProps> = ({
-  isEditing,
-  fileContent,
-  setFileContent,
-}) => {
+const EditorView: React.FC<EditorViewProps> = ({ isEditing, fileContent, setFileContent }) => {
   return (
-    <>
+    <div className="relative w-full h-full border border-gray-300 rounded p-2">
       {isEditing ? (
         <textarea
           className="w-full h-full border border-gray-300 rounded p-2"
@@ -20,11 +17,9 @@ const EditorView: React.FC<EditorViewProps> = ({
           onChange={(e) => setFileContent(e.target.value)}
         />
       ) : (
-        <div className="relative w-full h-full border border-gray-300 rounded p-2">
-          <pre>{fileContent}</pre>
-        </div>
+        <pre>{fileContent}</pre>
       )}
-    </>
+    </div>
   );
 };
 

@@ -1,27 +1,35 @@
-import React from "react";
-import EditorActions from "./EditorActions";
-import EditorView from "./EditorView";
-import { TreeNode } from "../../types/types";
+// components/editor/Editor.tsx
+import React from 'react';
+import { useFileContext } from '../../context/FileContext';
+import EditorActions from './EditorActions';
+import EditorView from './EditorView';
 
-interface EditorProps {
-  selectedFile: TreeNode | null;
-  isEditing: boolean;
-  handleSave: () => void;
-  handleCancel: () => void;
-  setIsEditing: (isEditing: boolean) => void;
-  fileContent: string;
-  setFileContent: (content: string) => void;
-}
+const Editor: React.FC = () => {
+  const {
+    selectedFile,
+    isEditing,
+    fileContent,
+    originalContent,
+    setFileContent,
+    setIsEditing,
+    setOriginalContent,
+    setSelectedFile
+  } = useFileContext();
 
-const Editor: React.FC<EditorProps> = ({
-  selectedFile,
-  isEditing,
-  handleSave,
-  handleCancel,
-  setIsEditing,
-  fileContent,
-  setFileContent,
-}) => {
+  const handleSave = () => {
+    if (selectedFile) {
+      // Εδώ μπορείτε να προσθέσετε τον κώδικα για να αποθηκεύσετε το περιεχόμενο του αρχείου
+      console.log(`Saving content for ${selectedFile.path}:`, fileContent);
+      setIsEditing(false);
+      setOriginalContent(fileContent);
+    }
+  };
+
+  const handleCancel = () => {
+    setFileContent(originalContent);
+    setIsEditing(false);
+  };
+
   return (
     <>
       {selectedFile ? (
