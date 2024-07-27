@@ -1,3 +1,10 @@
+// Enum για τους τύπους περιεχομένου
+export enum ContentType {
+  TEXT = "text",
+  IMAGE = "image",
+  JSON = "json",
+}
+
 export interface BaseTreeNode {
   id: number;
   name: string;
@@ -16,6 +23,7 @@ export interface FolderNode extends BaseTreeNode {
 export interface FileNode extends BaseTreeNode {
   type: "file";
   content?: string; // Files may have content
+  contentType?: ContentType; // Τύπος περιεχομένου
 }
 
 // Union type of TreeNode
@@ -33,21 +41,23 @@ export const jsonData: TreeNode[] = [
         name: "readme.txt",
         type: "file",
         path: "public/readme.txt",
-        content: "",
+        content: "This is a text file.",
+        contentType: ContentType.TEXT,
       },
       {
         id: 3,
         name: "config.json",
         type: "file",
-        path: "public/config.json",
-        content: "",
+        content: '{"key": "value"}',
+        contentType: ContentType.JSON,
       },
       {
         id: 4,
         name: "image.png",
         type: "file",
         path: "public/image.png",
-        content: "",
+        content: "Base64EncodedImageString",
+        contentType: ContentType.IMAGE,
       },
     ],
   },
@@ -56,57 +66,13 @@ export const jsonData: TreeNode[] = [
     name: "server",
     type: "folder",
     path: "server",
-    children: [
-      {
-        id: 6,
-        name: "server.txt",
-        type: "file",
-        path: "server/server.txt",
-        content: "",
-      },
-      {
-        id: 7,
-        name: "settings.json",
-        type: "file",
-        path: "server/settings.json",
-        content: "",
-      },
-      {
-        id: 8,
-        name: "logo.png",
-        type: "file",
-        path: "server/logo.png",
-        content: "",
-      },
-    ],
+    children: [],
   },
   {
     id: 9,
     name: "src",
     type: "folder",
     path: "src",
-    children: [
-      {
-        id: 10,
-        name: "info.txt",
-        type: "file",
-        path: "src/info.txt",
-        content: "",
-      },
-      {
-        id: 11,
-        name: "data.json",
-        type: "file",
-        path: "src/data.json",
-        content: "",
-      },
-      {
-        id: 12,
-        name: "banner.png",
-        type: "file",
-        path: "src/banner.png",
-        content: "",
-      },
-    ],
+    children: [],
   },
 ];

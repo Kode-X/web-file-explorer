@@ -19,7 +19,7 @@ const Editor: React.FC = () => {
     nodes
   } = useFileContext();
 
-  const handleSave = () => {
+  const handleEditorActionSave = () => {
     if (selectedFile) {
       const updatedNodes = updateNodeContent(nodes, selectedFile.id, fileContent);
       setNodes(updatedNodes);
@@ -28,7 +28,7 @@ const Editor: React.FC = () => {
     }
   };
 
-  const handleCancel = () => {
+  const handleEditorActionCancel = () => {
     setFileContent(originalContent);
     setIsEditing(false);
   };
@@ -42,8 +42,8 @@ const Editor: React.FC = () => {
           </div>
           <EditorActions
             isEditing={isEditing}
-            handleSave={handleSave}
-            handleCancel={handleCancel}
+            handleSave={handleEditorActionSave}
+            handleCancel={handleEditorActionCancel}
             setIsEditing={setIsEditing}
           />
           <EditorView
