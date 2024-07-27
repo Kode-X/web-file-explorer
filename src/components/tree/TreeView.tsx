@@ -42,7 +42,7 @@ const TreeView: React.FC<TreeViewProps> = ({
             key={node.id}
             node={node}
             onFileClick={onFileClick}
-            onDelete={() => deleteNode(node.name, node.type)}
+            onDelete={() => deleteNode(node)}
             onAddNode={(name: string, parentName: string, type: "folder" | "file") =>
               handleAddNode(name, parentName, type, setNodes, nodes)
             }

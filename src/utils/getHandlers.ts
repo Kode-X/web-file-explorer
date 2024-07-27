@@ -92,14 +92,15 @@ export const handleAddNode = (
 };
 
 export const handleDeleteNode = (
-  name: string,
-  type: string,
+  nodeToDelete: TreeNode,
   setNodes: React.Dispatch<React.SetStateAction<TreeNode[]>>,
-  nodes: TreeNode[]
+  nodes: TreeNode[],
+  selectedFile: TreeNode | null,
+  setSelectedFile: (file: TreeNode | null) => void
 ) => {
   const deleteNode = (nodes: TreeNode[]): TreeNode[] => {
     return nodes.filter((node) => {
-      if (node.name === name) {
+      if (node.id === nodeToDelete.id) {
         return false;
       }
       if (node.children) {
@@ -110,4 +111,8 @@ export const handleDeleteNode = (
   };
 
   setNodes(deleteNode(nodes));
+
+  if (selectedFile && selectedFile.id === nodeToDelete.id) {
+    setSelectedFile(null); // Reset selected file if it's deleted
+  }
 };
