@@ -1,31 +1,44 @@
 import { TreeNode } from "../types/types";
 
+// export const handleFileClick = (
+//   node: TreeNode,
+//   setSelectedFile: (node: TreeNode | null) => void,
+//   setFileContent: (content: string) => void,
+//   fetchFileContent: (path: string) => void,
+//   setIsEditing: (isEditing: boolean) => void
+// ) => {
+//   setSelectedFile(node);
+//   if (
+//     node.type === "file" &&
+//     (node.name.endsWith(".txt") || node.name.endsWith(".json"))
+//   ) {
+//     fetchFileContent(node.path!);
+//   } else {
+//     setFileContent("This file type is not supported for editing.");
+//   }
+//   setIsEditing(false);
+// };
+
 export const handleFileClick = (
   node: TreeNode,
   setSelectedFile: (node: TreeNode | null) => void,
   setFileContent: (content: string) => void,
-  fetchFileContent: (path: string) => void,
+  setOriginalContent: (content: string) => void,
   setIsEditing: (isEditing: boolean) => void
 ) => {
-  setSelectedFile(node);
-  if (
-    node.type === "file" &&
-    (node.name.endsWith(".txt") || node.name.endsWith(".json"))
-  ) {
-    fetchFileContent(node.path!);
-  } else {
-    setFileContent("This file type is not supported for editing.");
+  if (node.type === 'file') {
+    const fileContent = node.content || '';
+    setFileContent(fileContent);
+    setOriginalContent(fileContent);
+    setSelectedFile(node);
+    setIsEditing(false);
   }
-  setIsEditing(false);
 };
-
 export const fetchFileContent = (
   path: string,
   setFileContent: (content: string) => void,
   setOriginalContent: (content: string) => void
 ) => {
-  // Εδώ μπορείτε να προσθέσετε τον κώδικα για να φορτώσετε το περιεχόμενο του αρχείου
-  // Προς το παρόν θα χρησιμοποιήσουμε μια απλή προσομοίωση
   const mockContent = `Content of the file at ${path}`;
   setFileContent(mockContent);
   setOriginalContent(mockContent);

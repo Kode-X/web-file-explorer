@@ -21,8 +21,49 @@ export const handleDelete = (
   setNodes(deleteNode(nodes));
 };
 
-// Function to generate a unique ID (Consider using a library like uuid for production)
-const generateUniqueId = (): number => Date.now(); // Simplistic unique ID generator
+const createNode = (
+  name: string,
+  type: "folder" | "file",
+  parentPath: string
+): TreeNode => {
+  return type === "folder"
+    ? {
+        id: Date.now(),
+        name,
+        type: "folder",
+        path: `${parentPath ? parentPath + "/" : ""}${name}`,
+        children: [], // Folders start with no children
+      }
+    : {
+        id: Date.now(),
+        name,
+        type: "file",
+        path: `${parentPath ? parentPath + "/" : ""}${name}`,
+        content: "", // Default content for new files
+      };
+};
+
+const updateChildren = (
+  children: TreeNode[],
+  newNode: TreeNode
+): TreeNode[] => {
+  const updatedChildren = [
+    ...(children.filter((child) => child.type === "folder") || []), // Existing folders
+    ...(children.filter((child) => child.type === "file") || []), // Existing files
+  ];
+
+  updatedChildren.push(newNode); // Add the new node
+
+  return updatedChildren;
+};
+
+const sortChildren = (children: TreeNode[]): TreeNode[] => {
+  return children.sort((a, b) => {
+    if (a.type === "folder" && b.type === "file") return -1;
+    if (a.type === "file" && b.type === "folder") return 1;
+    return a.name.localeCompare(b.name);
+  });
+};
 
 export const handleAddNode = (
   name: string,
@@ -34,29 +75,11 @@ export const handleAddNode = (
   const addNodeToTree = (nodes: TreeNode[]): TreeNode[] => {
     return nodes.map((node) => {
       if (node.name === parentName && node.type === "folder") {
-        const newNode: TreeNode = type === "folder"
-          ? {
-              id: Date.now(),
-              name,
-              type: "folder",
-              path: `${node.path ? node.path + '/' : ''}${name}`,
-              children: [], // Folders start with no children
-            }
-          : {
-              id: Date.now(),
-              name,
-              type: "file",
-              path: `${node.path ? node.path + '/' : ''}${name}`,
-              content: "" // Default content for new files
-            };
+        const newNode = createNode(name, type, node.path || "");
+        const updatedChildren = updateChildren(node.children || [], newNode);
+        const sortedChildren = sortChildren(updatedChildren);
 
-        const updatedChildren = [
-          ...(node.children?.filter(child => child.type === "folder") || []), // Existing folders
-          newNode, // New node
-          ...(node.children?.filter(child => child.type === "file") || []) // Existing files
-        ];
-
-        return { ...node, children: updatedChildren };
+        return { ...node, children: sortedChildren };
       }
 
       if (node.children) {
@@ -67,7 +90,7 @@ export const handleAddNode = (
     });
   };
 
-  setNodes(addNodeToTree(nodes));
+  setNodes((prevNodes) => addNodeToTree(prevNodes));
 };
 
 export const generatePath = (
