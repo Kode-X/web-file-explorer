@@ -1,15 +1,15 @@
 // context/FileContext.tsx
 import React, { createContext, useContext, useState } from 'react';
-import { TreeNode } from '../types/types';
+import { jsonData, TreeNode } from '../types/types';
 
 interface FileContextType {
   nodes: TreeNode[];
+  setNodes: (nodes: TreeNode[]) => void;
   selectedFile: TreeNode | null;
   fileContent: string;
   originalContent: string;
   isEditing: boolean;
   searchTerm: string;
-  setNodes: (nodes: TreeNode[]) => void;
   setSelectedFile: (file: TreeNode | null) => void;
   setFileContent: (content: string) => void;
   setOriginalContent: (content: string) => void;
@@ -20,7 +20,7 @@ interface FileContextType {
 const FileContext = createContext<FileContextType | undefined>(undefined);
 
 export const FileProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [nodes, setNodes] = useState<TreeNode[]>([]);
+  const [nodes, setNodes] = useState<TreeNode[]>(jsonData); // Initialize with jsonData
   const [selectedFile, setSelectedFile] = useState<TreeNode | null>(null);
   const [fileContent, setFileContent] = useState<string>('');
   const [originalContent, setOriginalContent] = useState<string>('');
@@ -31,12 +31,12 @@ export const FileProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <FileContext.Provider
       value={{
         nodes,
+        setNodes,
         selectedFile,
         fileContent,
         originalContent,
         isEditing,
         searchTerm,
-        setNodes,
         setSelectedFile,
         setFileContent,
         setOriginalContent,

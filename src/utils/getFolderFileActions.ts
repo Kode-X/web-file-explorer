@@ -21,46 +21,46 @@ export const handleDelete = (
   setNodes(deleteNode(nodes));
 };
 
+// Function to generate a unique ID (Consider using a library like uuid for production)
+const generateUniqueId = (): number => Date.now(); // Simplistic unique ID generator
+
 export const handleAddNode = (
   name: string,
   parentName: string,
-  type: "folder" | "file", // Correct usage
+  type: "folder" | "file",
   setNodes: React.Dispatch<React.SetStateAction<TreeNode[]>>,
   nodes: TreeNode[]
 ) => {
   const addNodeToTree = (nodes: TreeNode[]): TreeNode[] => {
     return nodes.map((node) => {
       if (node.name === parentName && node.type === "folder") {
-        const newNode: TreeNode = {
-          id: Date.now(), // Ensure unique ID
-          name,
-          type, // Correctly assigned "folder" or "file"
-          children: type === "folder" ? [] : undefined, // Folders have children, files do not
-        };
+        const newNode: TreeNode = type === "folder"
+          ? {
+              id: Date.now(),
+              name,
+              type: "folder",
+              path: `${node.path ? node.path + '/' : ''}${name}`,
+              children: [], // Folders start with no children
+            }
+          : {
+              id: Date.now(),
+              name,
+              type: "file",
+              path: `${node.path ? node.path + '/' : ''}${name}`,
+              content: "" // Default content for new files
+            };
 
-        // Create a sorted list where folders come before files
         const updatedChildren = [
-          ...(newNode.type === "folder"
-            ? [newNode] // Insert new folder first
-            : []),
-          ...(node.children ?? []).filter((child) => child.type === "folder"), // Existing folders
-          ...(newNode.type === "file"
-            ? [newNode] // Insert new file last
-            : []),
-          ...(node.children ?? []).filter((child) => child.type === "file"), // Existing files
+          ...(node.children?.filter(child => child.type === "folder") || []), // Existing folders
+          newNode, // New node
+          ...(node.children?.filter(child => child.type === "file") || []) // Existing files
         ];
 
-        return {
-          ...node,
-          children: updatedChildren,
-        };
+        return { ...node, children: updatedChildren };
       }
 
       if (node.children) {
-        return {
-          ...node,
-          children: addNodeToTree(node.children),
-        };
+        return { ...node, children: addNodeToTree(node.children) };
       }
 
       return node;
@@ -68,4 +68,39 @@ export const handleAddNode = (
   };
 
   setNodes(addNodeToTree(nodes));
+};
+
+export const generatePath = (
+  parentPath: string,
+  name: string,
+  type: "folder" | "file"
+): string => {
+  return type === "file" ? `${parentPath}/${name}` : `${parentPath}/${name}`;
+};
+
+export const handleUpdateNodeName = (
+  oldName: string,
+  newName: string,
+  nodes: TreeNode[]
+): TreeNode[] => {
+  const updateNode = (nodes: TreeNode[], parentPath: string): TreeNode[] =>
+    nodes.map((node) => {
+      if (node.name === oldName) {
+        const updatedNode: TreeNode = {
+          ...node,
+          name: newName,
+          path: generatePath(parentPath, newName, node.type),
+        };
+        return updatedNode;
+      }
+      if (node.children) {
+        return {
+          ...node,
+          children: updateNode(node.children, `${parentPath}/${node.name}`),
+        };
+      }
+      return node;
+    });
+
+  return updateNode(nodes, "");
 };

@@ -9,20 +9,13 @@ const Tree: React.FC = () => {
   const { nodes, searchTerm, setSearchTerm, setSelectedFile, setFileContent, setIsEditing, setOriginalContent } = useFileContext();
 
   const handleFileClick = (node: TreeNode) => {
-    if (node.type === 'file' && (node.name.endsWith('.txt') || node.name.endsWith('.json'))) {
-      fetchFileContent(node.path!);
-    } else {
-      setFileContent('This file type is not supported for editing.');
+    if (node.type === 'file') {
+      const fileContent = node.content || '';
+      setFileContent(fileContent);
+      setOriginalContent(fileContent);
+      setSelectedFile(node);
+      setIsEditing(false);
     }
-    setSelectedFile(node);
-    setIsEditing(false);
-  };
-
-  const fetchFileContent = (path: string) => {
-    // Mock content fetching
-    const mockContent = `Content of the file at ${path}`;
-    setFileContent(mockContent);
-    setOriginalContent(mockContent);
   };
 
   return (

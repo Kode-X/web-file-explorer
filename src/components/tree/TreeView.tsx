@@ -23,10 +23,14 @@ const TreeView: React.FC<TreeViewProps> = ({
     handleDelete(name, type, setNodes, nodes);
   };
 
-  const onAddNode = (name: string, parentName: string, type: "folder" | "file") => {
+  const onAddNode = (
+    name: string,
+    parentName: string,
+    type: "folder" | "file"
+  ) => {
     handleAddNode(name, parentName, type, setNodes, nodes);
   };
-
+  
   return (
     <div className="space-y-2">
       {nodes.map((node) => (
