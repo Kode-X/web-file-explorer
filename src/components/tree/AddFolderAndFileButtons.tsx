@@ -1,7 +1,7 @@
 // components/tree/AddNodeButtons.tsx
 import React, { useState } from "react";
 import AddFolderAndFileModal from "./AddFolderAndFileModal";
-import Button from "../customLibrary/Button";
+import Button from "../../customLibrary/Button";
 
 interface AddFolderAndFileButtonsProps {
   onAddFolder: (name: string) => void;
