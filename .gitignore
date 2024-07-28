@@ -93,7 +93,6 @@ ehthumbs.db
 
 # Gatsby files
 .cache/
-public/
 
 # vuepress
 .vuepress/dist/

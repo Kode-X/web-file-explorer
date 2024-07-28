@@ -12,7 +12,7 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import classNames from "classnames";
-import { TreeNode } from "../../types/types";
+import { TreeNode, ContentType } from "../../types/types";
 import TreeView from "./TreeView";
 import AddFolderAndFileModal from "./AddFolderAndFileModal";
 import FolderActions from "./FolderActions";
@@ -30,6 +30,8 @@ const TreeNodeComponent: React.FC<{
   const [isHovered, setIsHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"folder" | "file">("folder");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
   const openModal = (type: "folder" | "file") => {
     setModalType(type);
     setIsModalOpen(true);
@@ -41,6 +43,16 @@ const TreeNodeComponent: React.FC<{
     if (name.trim()) {
       onAddNode(name, node.name, type);
       closeModal();
+    }
+  };
+
+  const handleFileClick = (node: TreeNode) => {
+    if (node.type === "file") {
+      if (node.contentType === ContentType.IMAGE && node.content) {
+        setImagePreview(node.content); // Assuming the content is a Base64 string
+      } else {
+        onFileClick(node);
+      }
     }
   };
 
@@ -76,16 +88,7 @@ const TreeNodeComponent: React.FC<{
                 className={classNames("flex-1", {
                   "text-blue-500": node.type === "file",
                 })}
-                onClick={() => {
-                  if (node.type === "file") {
-                    if (node.name.endsWith(".png")) {
-                      // Show the image if it's a PNG file
-                      window.open(node.content, "_blank");
-                    } else {
-                      onFileClick(node);
-                    }
-                  }
-                }}
+                onClick={() => handleFileClick(node)}
               >
                 {node.name}
               </span>
@@ -124,6 +127,20 @@ const TreeNodeComponent: React.FC<{
         handleSave={handleSave}
         type={modalType}
       />
+
+      {imagePreview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="p-4 bg-white rounded">
+            <img src={imagePreview} alt="Preview" className="max-w-full max-h-full" />
+            <button
+              className="px-4 py-2 mt-2 text-white bg-red-500 rounded"
+              onClick={() => setImagePreview(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

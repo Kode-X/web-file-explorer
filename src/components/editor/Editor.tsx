@@ -32,7 +32,7 @@ const Editor: React.FC = () => {
     setFileContent(originalContent);
     setIsEditing(false);
   };
-
+console.log(selectedFile)
   return (
     <>
       {selectedFile ? (
@@ -44,7 +44,7 @@ const Editor: React.FC = () => {
           )
         ) : (
           <>
-            <div className="text-lg font-semibold mb-2">
+            <div className="mb-2 text-lg font-semibold">
               Path: {selectedFile.path}
             </div>
             <EditorActions
