@@ -1,4 +1,4 @@
-// components/tree/SearchTree.tsx
+
 import React from 'react';
 
 interface SearchTreeProps {
@@ -10,7 +10,7 @@ const SearchTree: React.FC<SearchTreeProps> = ({ searchTerm, setSearchTerm }) =>
   return (
     <input
       type="text"
-      className="w-full mb-4 p-2 border rounded"
+      className="w-full p-2 mb-4 border rounded"
       placeholder="Search files..."
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}

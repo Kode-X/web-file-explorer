@@ -16,7 +16,7 @@ const FolderActions: React.FC<FolderActionsProps> = ({
   type,
 }) => {
   return (
-    <div className="flex space-x-2 ml-2">
+    <div className="flex ml-2 space-x-2">
       {type !== "file" && (
         <>
           <button
@@ -43,7 +43,7 @@ const FolderActions: React.FC<FolderActionsProps> = ({
         className="text-red-500 hover:text-red-700 focus:outline-none"
         onClick={(e) => {
           e.stopPropagation();
-          onDelete(); /* Prevent click event from propagating to the folder */
+          onDelete();
         }}
       >
         <TrashIcon className="w-5 h-5" />

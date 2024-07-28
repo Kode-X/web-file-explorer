@@ -11,14 +11,14 @@ export const createNode = (
         name,
         type: "folder",
         path: `${parentPath ? parentPath + "/" : ""}${name}`,
-        children: [], // Folders start with no children
+        children: [],
       }
     : {
         id: Date.now(),
         name,
         type: "file",
         path: `${parentPath ? parentPath + "/" : ""}${name}`,
-        content: "", // Default content for new files
+        content: "", 
       };
 };
 
@@ -27,11 +27,11 @@ export const updateChildren = (
   newNode: TreeNode
 ): TreeNode[] => {
   const updatedChildren = [
-    ...(children.filter((child) => child.type === "folder") || []), // Existing folders
-    ...(children.filter((child) => child.type === "file") || []), // Existing files
+    ...(children.filter((child) => child.type === "folder") || []),
+    ...(children.filter((child) => child.type === "file") || []), 
   ];
 
-  updatedChildren.push(newNode); // Add the new node
+  updatedChildren.push(newNode); 
 
   return updatedChildren;
 };

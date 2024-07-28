@@ -26,14 +26,14 @@ const AddFolderAndFileModal: React.FC<AddFolderAndFileModalProps> = ({
       );
       return hasValidExtension;
     }
-    return true; // For folders, no specific validation needed
+    return true;
   };
 
   const onSave = () => {
     if (validateName(newName)) {
       handleSave(newName, type);
-      setNewName(""); // Reset input after saving
-      setErrorMessage(""); // Clear error message
+      setNewName("");
+      setErrorMessage("");
     } else {
       setErrorMessage(
         "Invalid file name. Please use one of the following extensions: .txt, .json, .png"
@@ -54,20 +54,20 @@ const AddFolderAndFileModal: React.FC<AddFolderAndFileModalProps> = ({
       className="fixed inset-0 z-10 overflow-y-auto"
     >
       <div className="flex items-center justify-center min-h-screen p-4">
-        <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm">
+        <div className="w-full max-w-sm p-6 bg-white rounded shadow-lg">
           <DialogTitle className="text-lg font-semibold">{`Add New ${type}`}</DialogTitle>
           <input
             type="text"
-            className="border p-2 w-full mt-2 rounded"
+            className="w-full p-2 mt-2 border rounded"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={`${type} name`}
           />
           {errorMessage && (
-            <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+            <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
           )}
-          <div className="mt-4 flex justify-end space-x-2">
+          <div className="flex justify-end mt-4 space-x-2">
             <Button variant="primary" onClick={onSave}>
               Save
             </Button>

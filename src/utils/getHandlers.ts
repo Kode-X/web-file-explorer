@@ -1,25 +1,6 @@
 import { TreeNode } from "../types/types";
 import { createNode, sortChildren, updateChildren } from "./getHelpers";
 
-// export const handleFileClick = (
-//   node: TreeNode,
-//   setSelectedFile: (node: TreeNode | null) => void,
-//   setFileContent: (content: string) => void,
-//   fetchFileContent: (path: string) => void,
-//   setIsEditing: (isEditing: boolean) => void
-// ) => {
-//   setSelectedFile(node);
-//   if (
-//     node.type === "file" &&
-//     (node.name.endsWith(".txt") || node.name.endsWith(".json"))
-//   ) {
-//     fetchFileContent(node.path!);
-//   } else {
-//     setFileContent("This file type is not supported for editing.");
-//   }
-//   setIsEditing(false);
-// };
-
 export const handleFileClick = (
   node: TreeNode,
   setSelectedFile: (node: TreeNode | null) => void,
@@ -43,7 +24,6 @@ export const handleSave = (
   setOriginalContent: (content: string) => void
 ) => {
   if (selectedFile) {
-    // Εδώ μπορείτε να προσθέσετε τον κώδικα για να αποθηκεύσετε το περιεχόμενο του αρχείου
     console.log(`Saving content for ${selectedFile.path}:`, fileContent);
     setIsEditing(false);
     setOriginalContent(fileContent);
@@ -68,7 +48,6 @@ export const handleAddNode = (
 ) => {
   const addNodeToTree = (nodes: TreeNode[]): TreeNode[] => {
     if (parentName === "") {
-      // Handle adding to the root level
       const newNode = createNode(name, type, "");
       return [...nodes, newNode];
     }
@@ -114,6 +93,6 @@ export const handleDeleteNode = (
 
   setNodes(deleteNode(nodes));
   if (selectedFile && selectedFile.id === nodeToDelete.id) {
-    setSelectedFile(null); // Reset selected file if it's deleted
+    setSelectedFile(null);
   }
 };

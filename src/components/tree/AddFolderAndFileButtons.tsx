@@ -1,4 +1,3 @@
-// components/tree/AddNodeButtons.tsx
 import React, { useState } from "react";
 import AddFolderAndFileModal from "./AddFolderAndFileModal";
 import Button from "../customLibrary/Button";
@@ -15,14 +14,12 @@ const AddFolderAndFileButtons: React.FC<AddFolderAndFileButtonsProps> = ({
   const [isFolderModalOpen, setFolderModalOpen] = useState(false);
   const [isFileModalOpen, setFileModalOpen] = useState(false);
 
-  // Open and close modal handlers
   const openFolderModal = () => setFolderModalOpen(true);
   const closeFolderModal = () => setFolderModalOpen(false);
 
   const openFileModal = () => setFileModalOpen(true);
   const closeFileModal = () => setFileModalOpen(false);
 
-  // Handler functions for adding folder and file
   const handleAddFolder = (name: string) => {
     onAddFolder(name);
     closeFolderModal();
@@ -34,7 +31,7 @@ const AddFolderAndFileButtons: React.FC<AddFolderAndFileButtonsProps> = ({
   };
 
   return (
-    <div className="flex space-x-4  mb-5 pb-5 border-b border-gray-300">
+    <div className="flex pb-5 mb-5 space-x-4 border-b border-gray-300">
       <Button variant="primary" onClick={openFolderModal}>
         Add Folder
       </Button>
@@ -42,7 +39,6 @@ const AddFolderAndFileButtons: React.FC<AddFolderAndFileButtonsProps> = ({
         Add File
       </Button>
 
-      {/* Modals for adding folder and file */}
       <AddFolderAndFileModal
         isModalOpen={isFolderModalOpen}
         closeModal={closeFolderModal}

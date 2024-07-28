@@ -1,4 +1,3 @@
-// components/tree/TreeView.tsx
 import React, { useEffect, useState } from "react";
 import useTreeActions from "../../hooks/useTreeActions";
 import { TreeNode } from "../../types/types";
@@ -20,10 +19,8 @@ const TreeView: React.FC<TreeViewProps> = ({
     setNodes(initialNodes);
   }, [initialNodes]);
 
-
   return (
     <div className="space-y-2">
-
       {nodes.map((node) => (
         <TreeNodeComponent
           key={node.id}

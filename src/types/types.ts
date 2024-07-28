@@ -1,4 +1,3 @@
-// Enum για τους τύπους περιεχομένου
 export enum ContentType {
   TEXT = "text",
   IMAGE = "image",
@@ -10,23 +9,20 @@ export interface BaseTreeNode {
   name: string;
   type: "file" | "folder";
   path?: string;
-  children?: TreeNode[]; // Only relevant for folders
+  children?: TreeNode[];
 }
 
-// Interface for "folder" nodes
 export interface FolderNode extends BaseTreeNode {
   type: "folder";
-  children: TreeNode[]; // Folders must have children
+  children: TreeNode[];
 }
 
-// Interface for "file" nodes
 export interface FileNode extends BaseTreeNode {
   type: "file";
-  content?: string; // Files may have content
-  contentType?: ContentType; // Τύπος περιεχομένου
+  content?: string;
+  contentType?: ContentType;
 }
 
-// Union type of TreeNode
 export type TreeNode = FolderNode | FileNode;
 
 export const jsonData: TreeNode[] = [

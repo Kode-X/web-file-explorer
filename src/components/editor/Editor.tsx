@@ -1,4 +1,3 @@
-// components/editor/Editor.tsx
 import React from 'react';
 import { useFileContext } from '../../context/FileContext';
 import EditorActions from './EditorActions';
@@ -37,7 +36,7 @@ const Editor: React.FC = () => {
     <>
       {selectedFile ? (
         <>
-          <div className="text-lg font-semibold mb-2">
+          <div className="mb-2 text-lg font-semibold">
             Path: {selectedFile.path}
           </div>
           <EditorActions
@@ -59,7 +58,6 @@ const Editor: React.FC = () => {
   );
 };
 
-// Helper function to update the content in nodes
 const updateNodeContent = (nodes: TreeNode[], fileId: number, newContent: string): TreeNode[] => {
   const updateNode = (nodes: TreeNode[]): TreeNode[] =>
     nodes.map(node => {

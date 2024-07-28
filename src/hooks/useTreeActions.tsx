@@ -1,4 +1,3 @@
-// hooks/useTreeActions.tsx
 import { useCallback } from "react";
 import { useFileContext } from "../context/FileContext";
 import { handleAddNode, handleDeleteNode } from "../utils/getHandlers";

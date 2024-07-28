@@ -1,4 +1,3 @@
-// components/Button.tsx
 import React from "react";
 import classNames from "classnames";
 

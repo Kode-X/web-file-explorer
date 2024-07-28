@@ -1,4 +1,3 @@
-// components/tree/Tree.tsx
 import React from "react";
 import { useFileContext } from "../../context/FileContext";
 import TreeView from "./TreeView";
@@ -31,7 +30,6 @@ const Tree: React.FC = () => {
     );
   };
 
-  // Handler functions for adding folder and file
   const handleAddFolder = (name: string) => {
     handleAddNode(name, "", "folder", setNodes, nodes);
   };
@@ -42,7 +40,7 @@ const Tree: React.FC = () => {
 
   return (
     <div>
-      <div className="text-xl font-semibold mb-4">My Files</div>
+      <div className="mb-4 text-xl font-semibold">My Files</div>
       <SearchTree searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <AddFolderAndFileButtons
         onAddFolder={handleAddFolder}
